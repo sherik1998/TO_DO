@@ -1,16 +1,17 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 
-import { config } from 'dotenv';
+import { config } from "dotenv";
 
 config();
 
 export const typeOrmModuleOptions: TypeOrmModuleOptions = {
-  type: 'postgres',
+  type: "postgres",
   port: 5432,
+  host: process.env.DB_HOST,
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [__dirname + '/../**/entities/*.entity.{ts,js}'],
+  entities: [__dirname + "/../**/entities/*.entity.{ts,js}"],
   synchronize: false,
   autoLoadEntities: true,
   migrationsRun: true,
@@ -19,10 +20,10 @@ export const typeOrmModuleOptions: TypeOrmModuleOptions = {
 
 export const OrmConfig = {
   ...typeOrmModuleOptions,
-  migrationsTableName: 'migrations',
-  migrations: ['dist/migrations/*.js'],
+  migrationsTableName: "migrations",
+  migrations: ["dist/migrations/*.js"],
   cli: {
-    migrationsDir: 'src/migrations',
+    migrationsDir: "src/migrations",
   },
 };
 export default OrmConfig;

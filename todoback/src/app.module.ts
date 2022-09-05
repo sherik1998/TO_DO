@@ -17,8 +17,8 @@ import { TokenModule } from "./services/token/token.module";
         ...typeOrmModuleOptions,
       }),
     }),
-    TaskModule,
     UserModule,
+    TaskModule,
     TokenModule,
   ],
 })
