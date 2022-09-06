@@ -1,13 +1,16 @@
 import React from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import "./NewTask.scss";
 
 const PORT = process.env.REACT_APP_PORT;
 
-const NewTask = ({ sortAndAddEditor, getAllTasks }) => {
+const NewTask = ({ getAllTasks }) => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const task = useSelector((state) => state.task);
 
@@ -52,8 +55,19 @@ const NewTask = ({ sortAndAddEditor, getAllTasks }) => {
       });
   };
 
+  const logout = async () => {
+    localStorage.clear();
+    history.push("");
+  };
+
   return (
     <div className="main">
+      <div className="exit-div">
+        <button className="exit-button" onClick={() => logout()}>
+          Exit
+        </button>
+      </div>
+
       <h1>To-Do List</h1>
       <div className="newAdd">
         <div className="new-task">

@@ -14,6 +14,7 @@ const defaultState = {
     name: "",
     text: "",
   },
+  user: { name: "" },
 };
 
 const reducer = (state = defaultState, action) => {
@@ -22,6 +23,8 @@ const reducer = (state = defaultState, action) => {
       return { ...state, allTasks: action.playload };
     case "TASK":
       return { ...state, task: action.playload };
+    case "USER":
+      return { ...state, user: action.playload };
     default:
       return state;
   }

@@ -20,6 +20,8 @@ const App = () => {
 
   const allTasks = useSelector((state) => state.allTasks);
 
+  const user = useSelector((state) => state.user);
+
   const sortAndAddEditor = (tasks) => {
     let newAllTasks = tasks;
 
@@ -33,7 +35,7 @@ const App = () => {
 
   useEffect(async () => {
     await getAllTasks();
-  }, [1]);
+  }, [user]);
 
   const getAllTasks = async () => {
     await axios
@@ -104,12 +106,11 @@ const App = () => {
           changeBD={changeBD}
           openEditor={openEditor}
           delTask={delTask}
-          sortAndAddEditor={sortAndAddEditor}
           getAllTasks={getAllTasks}
         />
       </Route>
       <Route path="/edit/:id">
-        <EditNewPage sortAndAddEditor={sortAndAddEditor} />
+        <EditNewPage getAllTasks={getAllTasks} />
       </Route>
       <Redirect from="" to="/login" />
     </Switch>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
@@ -8,10 +9,12 @@ import "./EditNewPage.scss";
 
 const PORT = process.env.REACT_APP_PORT;
 
-const EditNewPage = ({ sortAndAddEditor }) => {
+const EditNewPage = ({ getAllTasks }) => {
   const dispatch = useDispatch();
 
   const task = useSelector((state) => state.task);
+
+  const token = localStorage.getItem("token");
 
   const { name, text } = task;
 
@@ -19,32 +22,37 @@ const EditNewPage = ({ sortAndAddEditor }) => {
 
   const { id } = useParams();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    await axios.get(`${PORT}/oneTask?id=${id}`).then((res) => {
-      const { name, text } = res.data.data;
-      dispatch({
-        type: "TASK",
-        playload: { name, text },
+    await axios
+      .get(`${PORT}/task/${id}`, {
+        headers: { authorization: token },
+      })
+      .then((res) => {
+        const { name, text } = res.data;
+        dispatch({
+          type: "TASK",
+          playload: { name, text },
+        });
       });
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [1]);
 
   const changeBDNew = async () => {
     if (name.trim()) {
       await axios
-        .patch(`${PORT}/updateTask`, {
-          id: id,
-          name: name.trim(),
-          text: !text.trim() ? "Описание отсутствует" : text,
-          isCheck: false,
-        })
-        .then((res) => {
-          dispatch({
-            type: "ADD_CASH",
-            playload: sortAndAddEditor(res.data.data),
-          });
+        .patch(
+          `${PORT}/task`,
+          {
+            id: id,
+            name: name.trim(),
+            text: !text.trim() ? "Описание отсутствует" : text,
+            isCheck: false,
+          },
+          {
+            headers: { authorization: token },
+          }
+        )
+        .then(async () => {
+          await getAllTasks();
         });
       dispatch({
         type: "TASK",
