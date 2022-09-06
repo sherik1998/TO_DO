@@ -1,0 +1,91 @@
+body {
+  width: 100vw;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: url("./img/964769.png") no-repeat;
+  background-color: #b72328;
+  background-size: 100%;
+  background-position: 50% 5px;
+  line-height: 1.5;
+  font-size: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+}
+
+h1 {
+  color: #b72328;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+button {
+  margin-left: 20px;
+}
+
+h2 {
+  margin: 0;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+h2:hover,
+p:hover {
+  overflow: none;
+  text-overflow: none;
+  display: block;
+  -webkit-line-clamp: none;
+  -webkit-box-orient: none;
+}
+
+p {
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+@media (max-width: 798px) {
+  body {
+    background-position: 50% 200px;
+    background-size: 170%;
+  }
+
+  button {
+    margin: 0;
+    margin-bottom: 5px;
+  }
+}
+
+@media (min-width: 799px) and (max-width: 1000px) {
+  body {
+    background-position: 50% 90px;
+  }
+
+  button {
+    margin: 0;
+    margin-bottom: 5px;
+  }
+}
