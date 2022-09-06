@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import axios from "axios";
 import { Box, TextField, Container, Button, Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
@@ -8,6 +10,8 @@ import "../LoginRegist.scss";
 const PORT = process.env.REACT_APP_PORT;
 
 const Registration = () => {
+  const dispatch = useDispatch();
+
   const [dataReg, dataRegEdit] = useState({
     name: "",
     email: "",
@@ -60,11 +64,15 @@ const Registration = () => {
           email: email,
           password: password,
         })
-        .then((results) => {
+        .then(async (results) => {
           localStorage.setItem(
             "token",
             `Bearer ${results.data.token.accessToken}`
           );
+          dispatch({
+            type: "USER",
+            playload: results.data,
+          });
           history.push("/main");
         })
         .catch((err) => {
