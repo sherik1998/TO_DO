@@ -29,6 +29,8 @@ services:
     build: ./React_To-Do
     ports: 
       - 3000:3000
+    depends_on:
+      - backend
 
 volumes:
   pgdata:
