@@ -24,5 +24,11 @@ services:
     depends_on:
       - db
 
+  frontend:
+    container_name: frontend
+    build: ./React_To-Do
+    ports: 
+      - 3000:3000
+
 volumes:
   pgdata:
