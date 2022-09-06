@@ -1,0 +1,19 @@
+.editName {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sizeName {
+  resize: none;
+  font-size: 1.5em;
+  width: 80%;
+}
+
+.editText {
+  margin-top: 5px;
+  min-height: 15px;
+  resize: none;
+  width: 97%;
+  width: -webkit-fill-available;
+}

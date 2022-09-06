@@ -16,6 +16,7 @@ services:
   backend: 
     container_name: backend
     build: ./todoback
+    command: sh -c "yarn run typeorm:migration:run:docker && yarn run start"
     ports:
       - 8000:8000
     volumes:

@@ -1,0 +1,50 @@
+.editName {
+  display: block;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sizeName {
+  resize: none;
+  font-size: 1.5em;
+  width: -webkit-fill-available;
+}
+
+.editText {
+  margin-top: 5px;
+  min-height: 15px;
+  resize: none;
+  width: 97%;
+  width: -webkit-fill-available;
+}
+
+.pageNew {
+  background-color: white;
+  padding: 10px;
+  width: 70%;
+  border-radius: 6px;
+  box-shadow: 2px 2px 3px #000000;
+  margin: 20px auto 0 auto;
+
+  p {
+    margin-bottom: 0;
+    margin-top: 5px;
+  }
+}
+
+.edit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 360px) {
+  .pageNew {
+    width: 90%;
+  }
+}
