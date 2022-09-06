@@ -15,7 +15,7 @@ export const typeOrmModuleOptions: TypeOrmModuleOptions = {
   synchronize: false,
   autoLoadEntities: true,
   migrationsRun: true,
-  logging: true,
+  logging: false,
 };
 
 export const OrmConfig = {
