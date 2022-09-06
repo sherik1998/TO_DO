@@ -8,10 +8,11 @@ const MainPage = ({
   openEditor,
   delTask,
   sortAndAddEditor,
+  getAllTasks,
 }) => {
   return (
     <>
-      <NewTask sortAndAddEditor={sortAndAddEditor} />
+      <NewTask sortAndAddEditor={sortAndAddEditor} getAllTasks={getAllTasks} />
       <TaskList
         allTasks={allTasks}
         changeBD={changeBD}

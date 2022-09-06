@@ -4,22 +4,30 @@ import { useDispatch, useSelector } from "react-redux";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import "./NewTask.scss";
 
-const NewTask = ({ sortAndAddEditor }) => {
+const PORT = process.env.REACT_APP_PORT;
+
+const NewTask = ({ sortAndAddEditor, getAllTasks }) => {
   const dispatch = useDispatch();
 
   const task = useSelector((state) => state.task);
 
   const { name, text } = task;
+  const token = localStorage.getItem("token");
 
   const addTask = async () => {
     if (name.trim()) {
       await axios
-        .post("http://localhost:9000/createTask", {
-          name: name.trim(),
-          text: !text.trim() ? "Описание отсутствует" : text,
-          isCheck: false,
-        })
-        .then((res) => {
+        .post(
+          `${PORT}/task`,
+          {
+            name: name.trim(),
+            text: !text.trim() ? "Описание отсутствует" : text,
+          },
+          {
+            headers: { authorization: token },
+          }
+        )
+        .then(async () => {
           dispatch({
             type: "TASK",
             playload: {
@@ -27,10 +35,7 @@ const NewTask = ({ sortAndAddEditor }) => {
               text: "",
             },
           });
-          dispatch({
-            type: "ADD_CASH",
-            playload: sortAndAddEditor(res.data.data),
-          });
+          await getAllTasks();
         });
     } else {
       alert('Поле "Задача" пустое!!!');
@@ -38,9 +43,13 @@ const NewTask = ({ sortAndAddEditor }) => {
   };
 
   const delAllTasks = async () => {
-    await axios.delete("http://localhost:9000/delAllTasks").then((res) => {
-      dispatch({ type: "ADD_CASH", playload: sortAndAddEditor(res.data.data) });
-    });
+    await axios
+      .delete(`${PORT}/task/all`, {
+        headers: { authorization: token },
+      })
+      .then(async () => {
+        await getAllTasks();
+      });
   };
 
   return (
@@ -76,7 +85,7 @@ const NewTask = ({ sortAndAddEditor }) => {
           />
         </div>
         <button onClick={() => addTask()}>Add</button>
-        <button onClick={() => delAllTasks()}>Delet All Tasks</button>
+        <button onClick={() => delAllTasks()}>Delete All Tasks</button>
       </div>
     </div>
   );

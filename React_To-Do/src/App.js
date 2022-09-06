@@ -1,13 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, useHistory } from "react-router-dom";
+
 import axios from "axios";
 import MainPage from "./components/Main/MainPage";
 import EditNewPage from "./components/EditNewPage/EditNewPage";
+import Login from "./components/Login/Login";
+import Registration from "./components/Registration/Registration";
+
+const PORT = process.env.REACT_APP_PORT;
 
 const App = () => {
   const dispatch = useDispatch();
+
+  const token = localStorage.getItem("token");
+
+  const history = useHistory();
 
   const allTasks = useSelector((state) => state.allTasks);
 
@@ -23,25 +32,46 @@ const App = () => {
   };
 
   useEffect(async () => {
-    await axios.get(`/allTasks`).then((res) => {
-      dispatch({ type: "ADD_CASH", playload: sortAndAddEditor(res.data.data) });
-    });
+    await getAllTasks();
   }, [1]);
 
-  const changeBD = async (index) => {
-    const { _id, name, text, isCheck } = allTasks[index];
+  const getAllTasks = async () => {
     await axios
-      .patch("http://localhost:9000/updateTask", {
-        _id,
-        name,
-        text,
-        isCheck,
+      .get(`${PORT}/task`, {
+        headers: { authorization: token },
       })
       .then((res) => {
         dispatch({
           type: "ADD_CASH",
-          playload: sortAndAddEditor(res.data.data),
+          playload: sortAndAddEditor(res.data),
         });
+      })
+      .catch((err) => {
+        console.log(err.response.status);
+        if (err.response.status === 401) {
+          localStorage.clear();
+        }
+        history.push("");
+      });
+  };
+
+  const changeBD = async (index) => {
+    const { id, name, text, isCheck } = allTasks[index];
+    await axios
+      .patch(
+        `${PORT}/task`,
+        {
+          id,
+          name,
+          text,
+          isCheck,
+        },
+        {
+          headers: { authorization: token },
+        }
+      )
+      .then(async () => {
+        await getAllTasks();
       });
   };
 
@@ -52,17 +82,22 @@ const App = () => {
 
   const delTask = async (index) => {
     await axios
-      .delete(`http://localhost:9000/deleteTask?_id=${allTasks[index]._id}`)
-      .then((res) => {
-        dispatch({
-          type: "ADD_CASH",
-          playload: sortAndAddEditor(res.data.data),
-        });
+      .delete(`${PORT}/task/one/${allTasks[index].id}`, {
+        headers: { authorization: token },
+      })
+      .then(async () => {
+        await getAllTasks();
       });
   };
 
   return (
     <Switch>
+      <Route path="/login">
+        <Login />
+      </Route>
+      <Route path="/registration">
+        <Registration />
+      </Route>
       <Route path="/main">
         <MainPage
           allTasks={allTasks}
@@ -70,12 +105,13 @@ const App = () => {
           openEditor={openEditor}
           delTask={delTask}
           sortAndAddEditor={sortAndAddEditor}
+          getAllTasks={getAllTasks}
         />
       </Route>
       <Route path="/edit/:id">
         <EditNewPage sortAndAddEditor={sortAndAddEditor} />
       </Route>
-      <Redirect from="" to="/main" />
+      <Redirect from="" to="/login" />
     </Switch>
   );
 };

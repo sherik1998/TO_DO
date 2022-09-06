@@ -6,6 +6,8 @@ import good from "../../img/good.png";
 import close from "../../img/close.png";
 import "./EditNewPage.scss";
 
+const PORT = process.env.REACT_APP_PORT;
+
 const EditNewPage = ({ sortAndAddEditor }) => {
   const dispatch = useDispatch();
 
@@ -19,7 +21,7 @@ const EditNewPage = ({ sortAndAddEditor }) => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    await axios.get(`http://localhost:9000/oneTask?_id=${id}`).then((res) => {
+    await axios.get(`${PORT}/oneTask?id=${id}`).then((res) => {
       const { name, text } = res.data.data;
       dispatch({
         type: "TASK",
@@ -32,8 +34,8 @@ const EditNewPage = ({ sortAndAddEditor }) => {
   const changeBDNew = async () => {
     if (name.trim()) {
       await axios
-        .patch("http://localhost:9000/updateTask", {
-          _id: id,
+        .patch(`${PORT}/updateTask`, {
+          id: id,
           name: name.trim(),
           text: !text.trim() ? "Описание отсутствует" : text,
           isCheck: false,

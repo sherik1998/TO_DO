@@ -7,7 +7,7 @@ import "./Task.scss";
 const Task = ({ index, item, allTasks, changeBD, openEditor, delTask }) => {
   let history = useHistory();
 
-  const { _id, name, text, isCheck } = item;
+  const { id, name, text, isCheck } = item;
 
   const paramCheck = {
     type: "checkbox",
@@ -43,7 +43,7 @@ const Task = ({ index, item, allTasks, changeBD, openEditor, delTask }) => {
           </div>
         </div>
       ) : (
-        <div className="page" onDoubleClick={() => editRedirect(_id)}>
+        <div className="page" onDoubleClick={() => editRedirect(id)}>
           <h2>{name}</h2>
           <p className="text-task">{text}</p>
           <div className="edit">
