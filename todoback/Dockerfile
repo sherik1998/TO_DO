@@ -10,7 +10,6 @@ RUN yarn
 
 VOLUME [ "/backApp" ]
 
-
 EXPOSE 8000
 
 CMD [ "yarn", "start" ]
