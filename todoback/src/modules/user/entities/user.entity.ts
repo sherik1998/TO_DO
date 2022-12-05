@@ -1,19 +1,9 @@
 import { Task } from "../../task/entities/task.entity";
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany } from "typeorm";
+import { BaseDateColumn } from "../../../constants";
 
 @Entity({ name: "users" })
-export class User {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
-
+export class User extends BaseDateColumn {
   @Column({
     type: "varchar",
     length: 50,
@@ -32,22 +22,4 @@ export class User {
   })
   @JoinColumn()
   tasks: Task[];
-
-  @CreateDateColumn({
-    name: "created_at",
-    type: "timestamp with time zone",
-    default: () => "CURRENT_TIMESTAMP",
-    update: false,
-    nullable: false,
-  })
-  createdAt: Date;
-
-  @UpdateDateColumn({
-    name: "updated_at",
-    type: "timestamp with time zone",
-    default: () => "CURRENT_TIMESTAMP",
-    onUpdate: "now()",
-    nullable: false,
-  })
-  updatedAt: Date;
 }

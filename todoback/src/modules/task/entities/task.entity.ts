@@ -1,19 +1,9 @@
 import { User } from "../../user/entities/user.entity";
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
+import { AfterLoad, Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { BaseDateColumn, TimePoint } from "../../../constants";
 
 @Entity({ name: "tasks" })
-export class Task {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
-
+export class Task extends BaseDateColumn {
   @Column({
     type: "varchar",
     length: 50,
@@ -23,6 +13,9 @@ export class Task {
   @Column({ type: "text", nullable: true })
   text: string | null;
 
+  @Column({ type: "text" })
+  time: string;
+
   @Column({ default: false })
   isCheck: boolean;
 
@@ -30,21 +23,25 @@ export class Task {
   @JoinColumn()
   user: User;
 
-  @CreateDateColumn({
-    name: "created_at",
-    type: "timestamp with time zone",
-    default: () => "CURRENT_TIMESTAMP",
-    update: false,
-    nullable: false,
-  })
-  createdAt: Date;
+  timePoints: number | null;
 
-  @UpdateDateColumn({
-    name: "updated_at",
-    type: "timestamp with time zone",
-    default: () => "CURRENT_TIMESTAMP",
-    onUpdate: "now()",
-    nullable: false,
-  })
-  updatedAt: Date;
+  @AfterLoad()
+  timePointFromJson() {
+    if (this.time) {
+      const points: TimePoint[] = JSON.parse(this.time);
+      if (points.length) {
+        let milliseconds = 0;
+        for (let i = 0; i < points.length; i++) {
+          if (points[i].end && points[i].start) {
+            milliseconds =
+              milliseconds +
+              (+new Date(points[i].end) - +new Date(points[i].start));
+          }
+        }
+        this.timePoints = milliseconds;
+      } else {
+        this.timePoints = 0;
+      }
+    }
+  }
 }

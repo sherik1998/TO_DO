@@ -50,6 +50,10 @@ export class UserService {
     }
   }
 
+  async getAllUsers() {
+    return await this.repUser.find();
+  }
+
   async login(dto: LoginDto) {
     const { email, password } = dto;
 

@@ -8,6 +8,8 @@ RUN yarn global add nestjs
 
 RUN yarn 
 
+RUN yarn run build
+
 VOLUME [ "/backApp" ]
 
 EXPOSE 8000

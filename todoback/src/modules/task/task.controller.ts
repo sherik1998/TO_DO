@@ -13,6 +13,7 @@ import { TaskService } from "./task.service";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { UpdateTaskDto } from "./dto/update-task.dto";
 import { JwtAuthGuard } from "../user/guards/jwt-auth.guard";
+import { IdsDto } from "./dto/set-user.dto";
 
 @Controller("task")
 export class TaskController {
@@ -20,14 +21,20 @@ export class TaskController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto, @Req() req) {
-    return this.taskService.create(req.user.id, createTaskDto);
+  create(@Body() createTaskDto: CreateTaskDto) {
+    return this.taskService.create(createTaskDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Req() req) {
-    return this.taskService.findAll(req.user.id);
+  findAllByUser(@Req() req) {
+    return this.taskService.findAllByUser(req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("all")
+  findAll() {
+    return this.taskService.findAll();
   }
 
   @UseGuards(JwtAuthGuard)
@@ -40,6 +47,24 @@ export class TaskController {
   @Patch()
   update(@Body() updateTaskDto: UpdateTaskDto, @Req() req) {
     return this.taskService.update(req.user.id, updateTaskDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch("set_user")
+  setUser(@Body() userSetDto: IdsDto) {
+    return this.taskService.setUser(userSetDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch("start/:id")
+  startTimeTask(@Param("id") taskId: string, @Req() req) {
+    return this.taskService.startTimeTask(taskId, req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch("end/:id")
+  endTimeTask(@Param("id") taskId: string, @Req() req) {
+    return this.taskService.endTimeTask(taskId, req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
