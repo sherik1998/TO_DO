@@ -22,6 +22,42 @@ const App = () => {
 
   const user = useSelector((state) => state.user);
 
+  const getTasks = () => {
+    axios
+      .get(`${PORT}/task/all`, {
+        headers: { authorization: token },
+      })
+      .then((res) => {
+        dispatch({
+          type: "ADD_CASH",
+          payload: sortAndAddEditor(res.data),
+        });
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          localStorage.clear();
+        }
+        history.push("");
+      });
+  };
+
+  const setUser = (taskId, userId) => {
+    axios
+      .patch(
+        `${PORT}/task/set_user`,
+        {
+          taskId,
+          userId,
+        },
+        {
+          headers: { authorization: token },
+        }
+      )
+      .then(() => {
+        getTasks();
+      });
+  };
+
   const sortAndAddEditor = (tasks) => {
     let newAllTasks = tasks;
 
@@ -33,23 +69,47 @@ const App = () => {
     return newAllTasks;
   };
 
-  useEffect(async () => {
-    await getAllTasks();
+  const startTask = async (taskId) => {
+    await axios.patch(
+      `${PORT}/task/start`,
+      { taskId },
+      {
+        headers: { authorization: token },
+      }
+    );
+  };
+
+  const endTask = (taskId) => {
+    axios
+      .patch(
+        `${PORT}/task/end`,
+        { taskId },
+        {
+          headers: { authorization: token },
+        }
+      )
+      .then(() => {
+        getAllTasks();
+      });
+  };
+
+  useEffect(() => {
+    getUsers();
+    getAllTasks();
   }, [user]);
 
-  const getAllTasks = async () => {
-    await axios
-      .get(`${PORT}/task`, {
+  const getUsers = () => {
+    axios
+      .get(`${PORT}/user/all`, {
         headers: { authorization: token },
       })
       .then((res) => {
         dispatch({
-          type: "ADD_CASH",
-          playload: sortAndAddEditor(res.data),
+          type: "USERS",
+          payload: res.data,
         });
       })
       .catch((err) => {
-        console.log(err.response.status);
         if (err.response.status === 401) {
           localStorage.clear();
         }
@@ -57,9 +117,29 @@ const App = () => {
       });
   };
 
-  const changeBD = async (index) => {
+  const getAllTasks = () => {
+    axios
+      .get(`${PORT}/task`, {
+        headers: { authorization: token },
+      })
+      .then((res) => {
+        dispatch({
+          type: "ADD_CASH",
+          payload: sortAndAddEditor(res.data),
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.status === 401) {
+          localStorage.clear();
+        }
+        history.push("");
+      });
+  };
+
+  const changeBD = (index) => {
     const { id, name, text, isCheck } = allTasks[index];
-    await axios
+    axios
       .patch(
         `${PORT}/task`,
         {
@@ -72,23 +152,23 @@ const App = () => {
           headers: { authorization: token },
         }
       )
-      .then(async () => {
-        await getAllTasks();
+      .then(() => {
+        getAllTasks();
       });
   };
 
   const openEditor = (index) => {
     allTasks[index].editor = !allTasks[index].editor;
-    dispatch({ type: "ADD_CASH", playload: [...allTasks] });
+    dispatch({ type: "ADD_CASH", payload: [...allTasks] });
   };
 
-  const delTask = async (index) => {
-    await axios
+  const delTask = (index) => {
+    axios
       .delete(`${PORT}/task/one/${allTasks[index].id}`, {
         headers: { authorization: token },
       })
-      .then(async () => {
-        await getAllTasks();
+      .then(() => {
+        getAllTasks();
       });
   };
 
@@ -107,6 +187,10 @@ const App = () => {
           openEditor={openEditor}
           delTask={delTask}
           getAllTasks={getAllTasks}
+          getTasks={getTasks}
+          setUser={setUser}
+          startTask={startTask}
+          endTask={endTask}
         />
       </Route>
       <Route path="/edit/:id">

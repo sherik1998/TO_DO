@@ -20,11 +20,13 @@ const defaultState = {
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case "ADD_CASH":
-      return { ...state, allTasks: action.playload };
+      return { ...state, allTasks: action.payload };
     case "TASK":
-      return { ...state, task: action.playload };
+      return { ...state, task: action.payload };
     case "USER":
-      return { ...state, user: action.playload };
+      return { ...state, user: action.payload };
+    case "USERS":
+      return { ...state, users: action.payload };
     default:
       return state;
   }

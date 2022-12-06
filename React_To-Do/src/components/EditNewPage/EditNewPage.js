@@ -22,8 +22,8 @@ const EditNewPage = ({ getAllTasks }) => {
 
   const { id } = useParams();
 
-  useEffect(async () => {
-    await axios
+  useEffect(() => {
+    axios
       .get(`${PORT}/task/${id}`, {
         headers: { authorization: token },
       })
@@ -31,14 +31,18 @@ const EditNewPage = ({ getAllTasks }) => {
         const { name, text } = res.data;
         dispatch({
           type: "TASK",
-          playload: { name, text },
+          payload: { name, text },
         });
+      })
+      .catch((err) => {
+        history.push("/main");
+        getAllTasks();
       });
   }, [1]);
 
-  const changeBDNew = async () => {
+  const changeBDNew = () => {
     if (name.trim()) {
-      await axios
+      axios
         .patch(
           `${PORT}/task`,
           {
@@ -51,12 +55,12 @@ const EditNewPage = ({ getAllTasks }) => {
             headers: { authorization: token },
           }
         )
-        .then(async () => {
-          await getAllTasks();
+        .then(() => {
+          getAllTasks();
         });
       dispatch({
         type: "TASK",
-        playload: { name: "", text: "" },
+        payload: { name: "", text: "" },
       });
       history.push("/main");
     } else {
@@ -75,7 +79,7 @@ const EditNewPage = ({ getAllTasks }) => {
           onChange={(event) =>
             dispatch({
               type: "TASK",
-              playload: { name: event.target.value, text },
+              payload: { name: event.target.value, text },
             })
           }
         />
@@ -89,7 +93,7 @@ const EditNewPage = ({ getAllTasks }) => {
           onChange={(event) =>
             dispatch({
               type: "TASK",
-              playload: { name, text: event.target.value },
+              payload: { name, text: event.target.value },
             })
           }
         />
@@ -101,7 +105,7 @@ const EditNewPage = ({ getAllTasks }) => {
           onChange={(event) =>
             dispatch({
               type: "TASK",
-              playload: { name, text: event.target.value },
+              payload: { name, text: event.target.value },
             })
           }
         />
@@ -114,7 +118,7 @@ const EditNewPage = ({ getAllTasks }) => {
           onClick={() => {
             dispatch({
               type: "TASK",
-              playload: { name: "", text: "" },
+              payload: { name: "", text: "" },
             });
             history.push("/main");
           }}

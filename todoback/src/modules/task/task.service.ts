@@ -97,12 +97,14 @@ export class TaskService {
     return this.repTask.find({
       where: { user: { id } },
       order: { createdAt: "ASC" },
+      relations: ["user"],
     });
   }
 
   findAll() {
     return this.repTask.find({
       order: { createdAt: "ASC" },
+      relations: ["user"],
     });
   }
 

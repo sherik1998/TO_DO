@@ -56,22 +56,22 @@ const Registration = () => {
     handleClick();
   };
 
-  const loginSystem = async () => {
+  const loginSystem = () => {
     if (password === rePassword) {
-      await axios
+      axios
         .post(`${PORT}/user/register`, {
           name: name,
           email: email,
           password: password,
         })
-        .then(async (results) => {
+        .then((results) => {
           localStorage.setItem(
             "token",
             `Bearer ${results.data.token.accessToken}`
           );
           dispatch({
             type: "USER",
-            playload: results.data,
+            payload: results.data,
           });
           history.push("/main");
         })

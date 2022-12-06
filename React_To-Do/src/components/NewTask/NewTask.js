@@ -8,7 +8,7 @@ import "./NewTask.scss";
 
 const PORT = process.env.REACT_APP_PORT;
 
-const NewTask = ({ getAllTasks }) => {
+const NewTask = ({ getAllTasks, getTasks }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -17,9 +17,9 @@ const NewTask = ({ getAllTasks }) => {
   const { name, text } = task;
   const token = localStorage.getItem("token");
 
-  const addTask = async () => {
+  const addTask = () => {
     if (name.trim()) {
-      await axios
+      axios
         .post(
           `${PORT}/task`,
           {
@@ -30,32 +30,32 @@ const NewTask = ({ getAllTasks }) => {
             headers: { authorization: token },
           }
         )
-        .then(async () => {
+        .then(() => {
           dispatch({
             type: "TASK",
-            playload: {
+            payload: {
               name: "",
               text: "",
             },
           });
-          await getAllTasks();
+          getAllTasks();
         });
     } else {
       alert('Поле "Задача" пустое!!!');
     }
   };
 
-  const delAllTasks = async () => {
-    await axios
+  const delAllTasks = () => {
+    axios
       .delete(`${PORT}/task/all`, {
         headers: { authorization: token },
       })
-      .then(async () => {
-        await getAllTasks();
+      .then(() => {
+        getAllTasks();
       });
   };
 
-  const logout = async () => {
+  const logout = () => {
     localStorage.clear();
     history.push("");
   };
@@ -80,7 +80,7 @@ const NewTask = ({ getAllTasks }) => {
             onChange={(event) =>
               dispatch({
                 type: "TASK",
-                playload: { name: event.target.value, text },
+                payload: { name: event.target.value, text },
               })
             }
           />
@@ -93,7 +93,7 @@ const NewTask = ({ getAllTasks }) => {
             onChange={(event) =>
               dispatch({
                 type: "TASK",
-                playload: { name, text: event.target.value },
+                payload: { name, text: event.target.value },
               })
             }
           />
@@ -101,6 +101,12 @@ const NewTask = ({ getAllTasks }) => {
         <button onClick={() => addTask()}>Add</button>
         <button onClick={() => delAllTasks()}>Delete All Tasks</button>
       </div>
+      <button onClick={() => getTasks()} className="all-tasks">
+        All Tasks
+      </button>
+      <button onClick={() => getAllTasks()} className="all-tasks">
+        My Tasks
+      </button>
     </div>
   );
 };

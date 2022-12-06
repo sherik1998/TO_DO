@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Put,
 } from "@nestjs/common";
 import { TaskService } from "./task.service";
 import { CreateTaskDto } from "./dto/create-task.dto";
@@ -56,14 +57,14 @@ export class TaskController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch("start/:id")
-  startTimeTask(@Param("id") taskId: string, @Req() req) {
+  @Patch("start")
+  startTimeTask(@Body("taskId") taskId: string, @Req() req) {
     return this.taskService.startTimeTask(taskId, req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch("end/:id")
-  endTimeTask(@Param("id") taskId: string, @Req() req) {
+  @Patch("end")
+  endTimeTask(@Body("taskId") taskId: string, @Req() req) {
     return this.taskService.endTimeTask(taskId, req.user.id);
   }
 

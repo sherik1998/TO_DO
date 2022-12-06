@@ -46,20 +46,20 @@ const Login = () => {
   const { vertical, horizontal } = state;
   const { email, password } = dataLogin;
 
-  const loginSystem = async () => {
-    await axios
+  const loginSystem = () => {
+    axios
       .post(`${PORT}/user/login`, {
         email: email,
         password: password,
       })
-      .then(async (results) => {
+      .then((results) => {
         localStorage.setItem(
           "token",
           `Bearer ${results.data.token.accessToken}`
         );
         dispatch({
           type: "USER",
-          playload: results.data,
+          payload: results.data,
         });
         history.push("/main");
       })

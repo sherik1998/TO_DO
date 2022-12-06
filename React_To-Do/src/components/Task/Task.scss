@@ -11,6 +11,36 @@
   color: black;
 }
 
+.header-title {   
+  display: flex;
+  justify-content: space-between;
+}
+
+.time-tracker-done{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  p {
+    font-size: 16px;
+  }
+}
+
+.time-tracker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  button {
+    margin: 0;
+    font-size: 18px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+}
+
 .edit {
   display: flex;
   justify-content: space-between;

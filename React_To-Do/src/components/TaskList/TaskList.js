@@ -3,14 +3,22 @@ import Task from "../Task/Task";
 import EditTask from "../EditTask/EditTask";
 import "./TaskList.scss";
 
-const TaskList = ({ allTasks, changeBD, openEditor, delTask }) => {
+const TaskList = ({
+  allTasks,
+  changeBD,
+  openEditor,
+  delTask,
+  setUser,
+  startTask,
+  endTask,
+}) => {
   return (
     <div id="content-page">
       {allTasks.map((item, index) => {
         if (item.editor) {
           return (
             <EditTask
-              key={`task-${index}`}
+              key={`task-${item.id}`}
               index={index}
               item={item}
               allTasks={allTasks}
@@ -21,13 +29,16 @@ const TaskList = ({ allTasks, changeBD, openEditor, delTask }) => {
         } else {
           return (
             <Task
-              key={`task-${index}`}
+              key={`task-${item.id}`}
               index={index}
               item={item}
               allTasks={allTasks}
               changeBD={changeBD}
               openEditor={openEditor}
               delTask={delTask}
+              setUser={setUser}
+              startTask={startTask}
+              endTask={endTask}
             />
           );
         }

@@ -51,7 +51,8 @@ export class UserService {
   }
 
   async getAllUsers() {
-    return await this.repUser.find();
+    const users = await this.repUser.find({ order: { createdAt: "ASC" } });
+    return users;
   }
 
   async login(dto: LoginDto) {
